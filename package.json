@@ -1,0 +1,34 @@
+{
+    "name": "automagical-webserver",
+    "description": "A skeleton Node/Express web server that automagically accepts web-requests on URIs dynamically generated from 'plug-and-play' controller modules. A great starting point for RESTful newbs and casual DIY-ers. Inspired by Dan Wahlin's Pluralsight course: Integrating Angular with Node.js RESTful Services.",
+    "author": {
+        "name": "Mathew Rumsey (matrumz)",
+        "url": "https://github.com/matrumz"
+    },
+    "contributors": [
+        "matrumz"
+    ],
+    "repository": {
+        "url": "https://github.com/matrumz/AutoMagical-WebServer",
+        "type": "git"
+    },
+    "license": "MIT",
+    "keywords": [
+        "node",
+        "express",
+        "webserver",
+        "server"
+    ],
+    "version": "0.0.1",
+    "main": "./dist/server.js",
+    "types": "./dist/server.d.ts",
+    "dependencies": {
+        "express": "*",
+        "core-js": "*",
+        "nodemon": "*"
+    },
+    "devDependencies": {
+        "@types/node": "*",
+        "typescript": "*"
+    }
+}
