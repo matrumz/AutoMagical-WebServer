@@ -29,6 +29,7 @@
     },
     "devDependencies": {
         "@types/node": "*",
+        "@types/express": "*",
         "typescript": "*"
     }
 }
