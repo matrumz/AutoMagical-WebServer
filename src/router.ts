@@ -2,23 +2,14 @@ import * as fs from "fs";
 import * as path from "path";
 import * as express from "express";
 import * as libFunctions from "./lib/functions";
-
-export interface IRouterConfig
-{
-    followSymLinks?: boolean;
-    controllerPattern?: string;
-}
+import { IRoutes } from "./config";
 
 export class Router
 {
     constructor(
         private app: express.Application,
-        private config?: IRouterConfig
-    )
-    {
-        if (!config)
-            config = Router.defaultConfig();
-    }
+        private config: IRoutes
+    ) { }
 
     /**
      * Load all controllers under controllerDir into the web-app routes
@@ -75,13 +66,5 @@ export class Router
         }
 
         return regexp.test(fileName);
-    }
-
-    public static defaultConfig(): IRouterConfig
-    {
-        return {
-            followSymLinks: false,
-            controllerPattern: null
-        };
     }
 }
