@@ -53,9 +53,9 @@ export class Router
                 const baseRoute = path.sep + dirs.join("?");
                 console.log("Created route: " + baseRoute + " for " + fullPath);
 
-                const controllerClass = require(path.join("..", fullPath));
-                const controller = new controllerClass(router);
-                this.app.use(baseRoute, router);
+                // const controllerClass = require(path.join("..", fullPath));
+                // const controller = new controllerClass(router);
+                // this.app.use(baseRoute, router);
             }
         });
     }
