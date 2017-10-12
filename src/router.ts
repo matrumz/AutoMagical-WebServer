@@ -3,6 +3,13 @@ import * as path from "path";
 import * as express from "express";
 import * as libFunctions from "./lib/functions";
 import { IRoutes } from "./config";
+import * as _ from "underscore";
+
+interface IRouteMap
+{
+    fileSystemPath: string;
+    routePath: string;
+}
 
 export class Router
 {
@@ -16,55 +23,69 @@ export class Router
      * @param controllerDir The root dir to look for controllers.
      * @param recursiveRootDir DO NOT USE THIS! INTERNAL USE ONLY!
      */
-    public load(controllerDir: string, recursiveRootDir: string = null): void
+    public load(controllerDir: string = this.config.controllerRootDir): void
     {
-        /* Preserve the original directory */
-        if (!libFunctions.isNullOrWhitespace(recursiveRootDir))
-            recursiveRootDir = path.basename(controllerDir);
+        /* Get a list of controller files and generate route paths */
+        const controllers =
+            libFunctions.walk(controllerDir, true)
+                .filter((filePath) =>
+                {
+                    return Router.isController(filePath);
+                })
+                .map((controllerFile): IRouteMap =>
+                {
+                    return {
+                        fileSystemPath: controllerFile,
+                        routePath: Router.fsPathToRoutePath(controllerFile, true)
+                    };
+                });
 
-        /* Walk-the-walk, talk-the-talk, and get all dem controllers */
-        fs.readdirSync(controllerDir).forEach((file) =>
-        {
-            /* Get the info for each file */
-            const fullPath = path.join(controllerDir, file);
-            const stat = fs.lstatSync(fullPath);
+        /* Test for duplicate route paths */
+        const routePaths = controllers.map((mapping) => { return mapping.routePath });
+        const duplicateRoutes = _.difference(routePaths, _.uniq(routePaths, false));
+        if (duplicateRoutes.length) {
+            const duplicateMappings = controllers.filter((mapping) =>
+            {
+                duplicateRoutes.indexOf(mapping.routePath) >= 0;
+            });
+            console.error("ERROR: Duplicate routes caused by files:");
+            duplicateMappings.forEach((mapping) =>
+            {
+                console.error(mapping.fileSystemPath);
+            });
+            throw new Error("Duplicate routes (" + duplicateRoutes.length + ")");
+        }
 
-            if (stat.isDirectory()) {
-                /* Recursively find all controllers */
-                this.load(fullPath, recursiveRootDir);
-            }
-            else if (this.isController(fullPath)) {
-                /* Use js file-path to construct a route */
-                let dirs = path.dirname(fullPath).split(path.sep);
-
-                if (dirs[0].toLowerCase() === recursiveRootDir.toLowerCase())
-                    dirs.splice(0, 1);
-
-                const router = express.Router();
-                const baseRoute = path.sep + dirs.join("?");
-                console.log("Created route: " + baseRoute + " for " + fullPath);
-
-                // const controllerClass = require(path.join("..", fullPath));
-                // const controller = new controllerClass(router);
-                // this.app.use(baseRoute, router);
-            }
-        });
+        /* We made it here... must be good to go to create routes */
+        // controllers.forEach((mapping) =>
+        // {
+        //     console.log("Creating route " + mapping.routePath + " for " + mapping.fileSystemPath);
+        //     const eRouter = express.Router();
+        //     const controllerClass = require(mapping.fileSystemPath);
+        //     const controller = new controllerClass(eRouter);
+        //     this.app.use(mapping.routePath, eRouter);
+        // });
     }
 
-    private isController(fileName: string): boolean
+    private static isController(fileName: string): boolean
     {
-        var regexp: RegExp;
+        return (fileName || "").match(/^.+\.controller\.js$/i) !== null;
+    }
 
-        try {
-            if (!libFunctions.isNullOrWhitespace(this.config.controllerPattern))
-                regexp = new RegExp(this.config.controllerPattern, 'i');
-            else
-                regexp = new RegExp(/.+\.controller\.js$/i)
-        }
-        catch (e) {
-            return false
-        }
+    private static fsPathToRoutePath(fsPath: string, removeRootDir: boolean = true): string
+    {
+        fsPath = fsPath.normalize();
+        fsPath.replace(/\\\\/g, "\\");
 
-        return regexp.test(fileName);
+        var parts: string[] = fsPath.split(path.sep);
+        if (removeRootDir)
+            parts.splice(0, 1);
+
+        parts.forEach((part, index) =>
+        {
+            parts[index] = part.replace(/\W+/g, "_");
+        });
+
+        return parts.join("/");
     }
 }

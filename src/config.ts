@@ -20,14 +20,18 @@ export interface IConfig
 
 export class Config implements IConfig
 {
-    constructor(public configPath = "../server.config.json")
+    constructor(public configPath: string)
     {
+        /* Init members */
+        this.connection = { port: null };
+        this.routes = { followSymLinks: null, controllerRootDir: null };
+
         try {
             /* Create empty JSON if file does not exist, fill later */
             if (!fs.existsSync(configPath))
-                fs.writeFileSync(configPath, JSON.stringify({}), "w");
+                fs.writeFileSync(configPath, JSON.stringify({}));
         } catch (e) {
-            throw new Error("Could not check for/create missing server config file (" + this.configPath + "): " + (<Error>e).message);
+            throw new Error("Could not check for/create missing server config file (" + configPath + "): " + (<Error>e).message);
         }
 
         this.load();
@@ -35,8 +39,9 @@ export class Config implements IConfig
 
     public load(): void
     {
+        var configContents: IConfig;
         try {
-            var configContents: IConfig = JSON.parse(fs.readFileSync(this.configPath).toString())
+            configContents = JSON.parse(fs.readFileSync(this.configPath, { encoding: this.encoding }));
         } catch (e) {
             throw new Error("Could not load JSON object from server config file: " + (<Error>e).message);
         }
@@ -106,4 +111,6 @@ export class Config implements IConfig
 
     public connection: IConnection;
     public routes: IRoutes;
+
+    private encoding = "utf8";
 }

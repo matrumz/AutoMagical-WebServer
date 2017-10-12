@@ -25,11 +25,13 @@
     "dependencies": {
         "express": "*",
         "core-js": "*",
-        "nodemon": "*"
+        "nodemon": "*",
+        "underscore": "*"
     },
     "devDependencies": {
         "@types/node": "*",
         "@types/express": "*",
+        "@types/underscore": "*",
         "typescript": "*"
     }
 }

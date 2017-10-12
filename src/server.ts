@@ -2,18 +2,19 @@ import * as express from "express";
 import * as fs from "fs";
 import { Router } from "./router";
 import { Config } from "./config";
+import * as process from "process";
 
 class Server
 {
-    constructor()
+    constructor(configPath: string = "../server.config.json")
     {
-        this.init();
-        this.start();
+        this.init(configPath);
+        // this.start();
     }
 
-    private init(): void
+    private init(configPath: string): void
     {
-        this.config = new Config();
+        this.config = new Config(configPath);
         this.app = express();
         this.router = new Router(this.app, this.config.routes);
 
@@ -23,7 +24,7 @@ class Server
     private initRoutes(): void
     {
         /* Auto-create routes from directory structure and files that match the controller pattern */
-        this.router.load(this.config.routes.controllerRootDir);
+        this.router.load();
 
         /* Respond to all other requests with error */
         this.app.all("/*", (request, response) =>
@@ -42,4 +43,5 @@ class Server
     private router: Router;
 }
 
+process.chdir(__dirname);
 var server = new Server();
