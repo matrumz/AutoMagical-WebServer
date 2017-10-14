@@ -9,7 +9,7 @@ class Server
     constructor(configPath: string = "../server.config.json")
     {
         this.init(configPath);
-        // this.start();
+        this.start();
     }
 
     private init(configPath: string): void
@@ -35,6 +35,7 @@ class Server
 
     private start(): void
     {
+        console.log("Listening on port: " + this.config.connection.port)
         this.app.listen(this.config.connection.port);
     }
 

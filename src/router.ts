@@ -21,13 +21,12 @@ export class Router
     /**
      * Load all controllers under controllerDir into the web-app routes
      * @param controllerDir The root dir to look for controllers.
-     * @param recursiveRootDir DO NOT USE THIS! INTERNAL USE ONLY!
      */
     public load(controllerDir: string = this.config.controllerRootDir): void
     {
         /* Get a list of controller files and generate route paths */
         const controllers =
-            libFunctions.walk(controllerDir, true)
+            libFunctions.walk(controllerDir, true, true)
                 .filter((filePath) =>
                 {
                     return Router.isController(filePath);
@@ -36,7 +35,7 @@ export class Router
                 {
                     return {
                         fileSystemPath: controllerFile,
-                        routePath: Router.fsPathToRoutePath(controllerFile, true)
+                        routePath: Router.fsPathToRoutePath(controllerFile, true, controllerDir)
                     };
                 });
 
@@ -57,14 +56,14 @@ export class Router
         }
 
         /* We made it here... must be good to go to create routes */
-        // controllers.forEach((mapping) =>
-        // {
-        //     console.log("Creating route " + mapping.routePath + " for " + mapping.fileSystemPath);
-        //     const eRouter = express.Router();
-        //     const controllerClass = require(mapping.fileSystemPath);
-        //     const controller = new controllerClass(eRouter);
-        //     this.app.use(mapping.routePath, eRouter);
-        // });
+        controllers.forEach((mapping) =>
+        {
+            console.log("Creating route " + mapping.routePath + " for " + mapping.fileSystemPath);
+            const eRouter = express.Router();
+            const controllerClass = require(mapping.fileSystemPath);
+            const controller = new controllerClass(eRouter);
+            this.app.use(mapping.routePath, eRouter);
+        });
     }
 
     private static isController(fileName: string): boolean
@@ -72,20 +71,30 @@ export class Router
         return (fileName || "").match(/^.+\.controller\.js$/i) !== null;
     }
 
-    private static fsPathToRoutePath(fsPath: string, removeRootDir: boolean = true): string
+    private static fsPathToRoutePath(fsPath: string, removeRootDir: boolean = true, controllerRootDir: string = null): string
     {
-        fsPath = fsPath.normalize();
         fsPath.replace(/\\\\/g, "\\");
 
         var parts: string[] = fsPath.split(path.sep);
         if (removeRootDir)
-            parts.splice(0, 1);
+            parts.splice(
+                0,
+                parts.indexOf(
+                    path.normalize(controllerRootDir)
+                    .replace(
+                        new RegExp("\\"+path.sep + "$","g"),
+                        ""
+                    )
+                    .split(path.sep).pop()
+                ) + 1
+            );
+
 
         parts.forEach((part, index) =>
         {
-            parts[index] = part.replace(/\W+/g, "_");
+            parts[index] = path.parse(part).name.replace(/\W+/g, "_");
         });
 
-        return parts.join("/");
+        return "/" + parts.join("/");
     }
 }
