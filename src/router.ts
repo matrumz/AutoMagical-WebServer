@@ -1,4 +1,3 @@
-import * as fs from "fs";
 import * as path from "path";
 import * as express from "express";
 import * as libFunctions from "./lib/functions";
@@ -11,6 +10,9 @@ interface IRouteMap
     routePath: string;
 }
 
+/**
+ * Object for finding controllers and binding them to URIs used by an Express application.
+ */
 export class Router
 {
     constructor(
@@ -29,7 +31,7 @@ export class Router
             libFunctions.walk(controllerDir, true, true)
                 .filter((filePath) =>
                 {
-                    return Router.isController(filePath);
+                    return this.isController(filePath);
                 })
                 .map((controllerFile): IRouteMap =>
                 {
@@ -40,12 +42,23 @@ export class Router
                 });
 
         /* Test for duplicate route paths */
-        const routePaths = controllers.map((mapping) => { return mapping.routePath });
-        const duplicateRoutes = _.difference(routePaths, _.uniq(routePaths, false));
+        const countedRoutePaths = _.countBy(controllers, (controller) =>
+        {
+            return controller.routePath;
+        });
+        var duplicateRoutes: string[] = [];
+        _.filter(countedRoutePaths, (count, path) =>
+        {
+            if (count > 1)
+                duplicateRoutes.push(path)
+            return false
+        })
+
+        /* Handle duplicate routes */
         if (duplicateRoutes.length) {
             const duplicateMappings = controllers.filter((mapping) =>
             {
-                duplicateRoutes.indexOf(mapping.routePath) >= 0;
+                return duplicateRoutes.indexOf(mapping.routePath) >= 0;
             });
             console.error("ERROR: Duplicate routes caused by files:");
             duplicateMappings.forEach((mapping) =>
@@ -66,11 +79,25 @@ export class Router
         });
     }
 
-    private static isController(fileName: string): boolean
+    /**
+     * Test if a file is a controller by its name.
+     *
+     * (Will use configuration)
+     *
+     * @param fileName File name/path to test for controller nomenclature.
+     */
+    private isController(fileName: string): boolean
     {
         return (fileName || "").match(/^.+\.controller\.js$/i) !== null;
     }
 
+    /**
+     * Manipulates a file-path to create a URI-possible string.
+     *
+     * @param fsPath File path to turn into URI
+     * @param removeRootDir If TRUE, the controllerRootDir will be removed from the URI.
+     * @param controllerRootDir The path to remove from the URI if removeRootDir is TRUE.
+     */
     private static fsPathToRoutePath(fsPath: string, removeRootDir: boolean = true, controllerRootDir: string = null): string
     {
         fsPath.replace(/\\\\/g, "\\");
@@ -81,11 +108,11 @@ export class Router
                 0,
                 parts.indexOf(
                     path.normalize(controllerRootDir)
-                    .replace(
-                        new RegExp("\\"+path.sep + "$","g"),
+                        .replace(
+                        new RegExp("\\" + path.sep + "$", "g"),
                         ""
-                    )
-                    .split(path.sep).pop()
+                        )
+                        .split(path.sep).pop()
                 ) + 1
             );
 
