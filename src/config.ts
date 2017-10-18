@@ -1,5 +1,6 @@
-import * as path from "path"
-import * as fs from "fs"
+import * as path from "path";
+import * as fs from "fs";
+import * as os from "os";
 
 /* Connection-related parameters in a configuration file. */
 export interface IConnection
@@ -130,7 +131,7 @@ export class Config implements IConfig
                     defaultToThis ?
                         this.routes.controllerRootDir || obj.routes.controllerRootDir :
                         obj.routes.controllerRootDir || this.routes.controllerRootDir
-                ) || "../controllers/",
+                ) || path.join(os.homedir(), "controllers/"),
 
                 controllerPattern: (
                     defaultToThis ?

@@ -2,6 +2,8 @@ import * as express from "express";
 import { Router } from "./router";
 import { Config } from "./config";
 import * as process from "process";
+import * as path from "path";
+import * as os from "os";
 
 /**
  * A wrapper around an Express application,
@@ -15,7 +17,7 @@ class Server
      * Init server and start immediately.
      * @param configPath Path to server configuration JSON file.
      */
-    constructor(configPath: string = "../server.config.json")
+    constructor(configPath: string = path.join(os.homedir(), ".server.config.json"))
     {
         try {
             this.init(configPath);
