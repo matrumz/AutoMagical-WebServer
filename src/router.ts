@@ -101,7 +101,12 @@ export class Router
      */
     private isController(fileName: string): boolean
     {
-        return (fileName || "").match(/^.+\.controller\.js$/i) !== null;
+        try {
+            const re = new RegExp(this.config.controllerPattern, "i");
+            return (fileName || "").match(re) !== null;
+        } catch (e) {
+            throw new Error("Cannot search for controllers with the specified controllerPattern (" + this.config.controllerPattern + "): " + (<Error>e).message);
+        }
     }
 
     /**
@@ -135,6 +140,6 @@ export class Router
             parts[index] = path.parse(part).name.replace(/\W+/g, "_");
         });
 
-        return "/" + parts.join("/");
+        return (("/" + parts.join("/")) || "").toLowerCase();
     }
 }

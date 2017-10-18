@@ -12,6 +12,7 @@ export interface IRoutes
 {
     followSymLinks: boolean;
     controllerRootDir: string;
+    controllerPattern: string;
 }
 
 /**
@@ -37,7 +38,7 @@ export class Config implements IConfig
     {
         /* Init members */
         this.connection = { port: null };
-        this.routes = { followSymLinks: null, controllerRootDir: null };
+        this.routes = { followSymLinks: null, controllerRootDir: null, controllerPattern: null };
 
         /* Detect/create a config file */
         try {
@@ -104,7 +105,7 @@ export class Config implements IConfig
         if (!obj.connection)
             obj.connection = { port: null };
         if (!obj.routes)
-            obj.routes = { followSymLinks: null, controllerRootDir: null };
+            obj.routes = { followSymLinks: null, controllerRootDir: null, controllerPattern: null };
 
         /* Merge this and passed object into a single, merged object, applying defaults as necessary. */
         var mergedConfig: IConfig = {
@@ -129,7 +130,13 @@ export class Config implements IConfig
                     defaultToThis ?
                         this.routes.controllerRootDir || obj.routes.controllerRootDir :
                         obj.routes.controllerRootDir || this.routes.controllerRootDir
-                ) || "../controllers/"
+                ) || "../controllers/",
+
+                controllerPattern: (
+                    defaultToThis ?
+                        this.routes.controllerPattern || obj.routes.controllerPattern :
+                        obj.routes.controllerPattern || this.routes.controllerPattern
+                ) || "^.+\\.controller\\.js$"
             }
         }
 
@@ -140,6 +147,7 @@ export class Config implements IConfig
         this.connection.port = mergedConfig.connection.port;
         this.routes.followSymLinks = mergedConfig.routes.followSymLinks;
         this.routes.controllerRootDir = mergedConfig.routes.controllerRootDir;
+        this.routes.controllerPattern = mergedConfig.routes.controllerPattern;
     }
 
     public connection: IConnection;
