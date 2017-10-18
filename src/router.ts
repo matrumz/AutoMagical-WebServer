@@ -72,9 +72,22 @@ export class Router
         controllers.forEach((mapping) =>
         {
             console.log("Creating route " + mapping.routePath + " for " + mapping.fileSystemPath);
+
+            /*
+             * Create a router to pass to the controller. The controller can bind its functions to URIs in the router.
+             * That router is then incorporated into the Express app, appended to the URI we've generated here.
+             */
             const eRouter = express.Router();
-            const controllerClass = require(mapping.fileSystemPath);
-            const controller = new controllerClass(eRouter);
+
+            /* Load the controller script, attempt to instantiate it */
+            try {
+                const controllerClass = require(mapping.fileSystemPath);
+                const controller = new controllerClass(eRouter);
+            } catch (e) {
+                throw new Error("Failed to load controller from " + mapping.fileSystemPath + ": " + (<Error>e).message);
+            }
+
+            /* The controller configured the router for us, put it into the app, appended to the route we've generated here. */
             this.app.use(mapping.routePath, eRouter);
         });
     }

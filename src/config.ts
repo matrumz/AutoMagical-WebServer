@@ -129,7 +129,7 @@ export class Config implements IConfig
                     defaultToThis ?
                         this.routes.controllerRootDir || obj.routes.controllerRootDir :
                         obj.routes.controllerRootDir || this.routes.controllerRootDir
-                ) || "../webControllers/"
+                ) || "../controllers/"
             }
         }
 

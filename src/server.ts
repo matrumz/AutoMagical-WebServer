@@ -21,6 +21,8 @@ class Server
             this.init(configPath);
         } catch (e) {
             console.error("Failed to initialize: " + (<Error>e).message);
+            console.log("Dumping config...");
+            this.config.dump();
             return;
         }
 
