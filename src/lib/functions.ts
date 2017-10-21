@@ -7,7 +7,7 @@ import * as path from "path";
  */
 export function isNullOrWhitespace(str: string): boolean
 {
-    return str === null || str.match(/^\s*$/) !== null;
+    return str === null || (str || "").match(/^\s*$/) !== null;
 }
 
 /**

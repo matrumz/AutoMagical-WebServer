@@ -33,5 +33,10 @@
         "@types/express": "*",
         "@types/underscore": "*",
         "typescript": "*"
+    },
+    "scripts": {
+        "postinstall": "node ./scripts/setup.js",
+        "prestart": "node ./scripts/preStart.js",
+        "start": "echo $npm_package_config_controllers && nodemon --watch $npm_package_config_controllers ./dist/server.js"
     }
 }

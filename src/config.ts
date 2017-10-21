@@ -1,3 +1,4 @@
+import * as libFunctions from "./lib/functions";
 import * as path from "path";
 import * as fs from "fs";
 import * as os from "os";
@@ -35,19 +36,22 @@ export class Config implements IConfig
      *
      * @param configPath Path to configuration file, relative to server.[tj]s
      */
-    constructor(public configPath: string)
+    constructor(public configPath?: string)
     {
         /* Init members */
+        if (libFunctions.isNullOrWhitespace(this.configPath))
+            this.configPath = path.join(os.homedir(), ".server.config.json")
+
         this.connection = { port: null };
         this.routes = { followSymLinks: null, controllerRootDir: null, controllerPattern: null };
 
         /* Detect/create a config file */
         try {
             /* Create empty JSON if file does not exist, fill later */
-            if (!fs.existsSync(configPath))
-                fs.writeFileSync(configPath, JSON.stringify({}));
+            if (!fs.existsSync(this.configPath))
+                fs.writeFileSync(this.configPath, JSON.stringify({}));
         } catch (e) {
-            throw new Error("Could not check for/create missing server config file (" + configPath + "): " + (<Error>e).message);
+            throw new Error("Could not check for/create missing server config file (" + this.configPath + "): " + (<Error>e).message);
         }
 
         /* Load the config file */
@@ -69,18 +73,6 @@ export class Config implements IConfig
 
         /* Sync the file's object with this, giving precedent to values found in the file over values in this object */
         this.sync(false, configContents);
-
-        /* Perhaps we should let the server write the resulting synced object back to disk */
-        // /*
-        //  * Now that we've synced the file's config and this, this object is now the master:
-        //  * write it back out to disk
-        //  */
-        // try {
-        //     // fs.writeFileSync(this.configPath, JSON.stringify(configContents));
-        //     this.dump()
-        // } catch (e) {
-        //     throw new Error("Could not refresh server config file after load: " + (<Error>e).message);
-        // }
     }
 
     /* Write this object out to disk, using this object's path. */

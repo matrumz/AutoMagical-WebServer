@@ -17,7 +17,7 @@ class Server
      * Init server and start immediately.
      * @param configPath Path to server configuration JSON file.
      */
-    constructor(configPath: string = path.join(os.homedir(), ".server.config.json"))
+    constructor(configPath?: string)
     {
         try {
             this.init(configPath);

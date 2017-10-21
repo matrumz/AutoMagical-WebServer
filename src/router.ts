@@ -1,5 +1,6 @@
 import * as path from "path";
 import * as express from "express";
+import * as os from "os";
 import * as libFunctions from "./lib/functions";
 import { IRoutes } from "./config";
 import * as _ from "underscore";
@@ -28,7 +29,7 @@ export class Router
     {
         /* Get a list of controller files and generate route paths */
         const controllers =
-            libFunctions.walk(controllerDir, true, true)
+            libFunctions.walk(path.resolve(os.homedir(), controllerDir), true, true)
                 .filter((filePath) =>
                 {
                     return this.isController(filePath);
