@@ -20,7 +20,7 @@
         "server",
         "rest"
     ],
-    "version": "0.0.1",
+    "version": "0.1.0",
     "main": "./dist/server.js",
     "types": "./dist/server.d.ts",
     "dependencies": {
