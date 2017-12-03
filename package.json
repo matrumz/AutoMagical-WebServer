@@ -17,7 +17,8 @@
         "node",
         "express",
         "webserver",
-        "server"
+        "server",
+        "rest"
     ],
     "version": "0.0.1",
     "main": "./dist/server.js",
@@ -36,7 +37,6 @@
     },
     "scripts": {
         "postinstall": "node ./scripts/setup.js",
-        "prestart": "node ./scripts/preStart.js",
-        "start": "echo $npm_package_config_controllers && nodemon --watch $npm_package_config_controllers ./dist/server.js"
+        "start": "./scripts/start.bash"
     }
 }
