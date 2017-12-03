@@ -23,6 +23,9 @@
     "version": "0.1.0",
     "main": "./dist/server.js",
     "types": "./dist/server.d.ts",
+    "bin": {
+        "amwebs": "./scripts/start.bash"
+    },
     "dependencies": {
         "express": "*",
         "core-js": "*",
