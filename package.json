@@ -25,7 +25,7 @@
     "types": "./dist/server.d.ts",
     "bin": {
         "amwebs": "./scripts/start.bash",
-        "amwebs-gen-config": "./scripts/setup.js"
+        "amwebs-setup": "./scripts/setup.js"
     },
     "dependencies": {
         "express": "*",
