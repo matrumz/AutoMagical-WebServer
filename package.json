@@ -28,16 +28,16 @@
         "amwebs-setup": "./scripts/setup.js"
     },
     "dependencies": {
-        "express": "*",
-        "core-js": "*",
-        "nodemon": "*",
-        "underscore": "*"
+        "express": "^4.16.2",
+        "core-js": "^2.5.1",
+        "nodemon": "^1.12.5",
+        "underscore": "^1.8.3"
     },
     "devDependencies": {
-        "@types/node": "*",
-        "@types/express": "*",
-        "@types/underscore": "*",
-        "typescript": "*"
+        "@types/node": "^8.0.55",
+        "@types/express": "^4.0.39",
+        "@types/underscore": "^1.8.5",
+        "typescript": "^2.6.2"
     },
     "scripts": {
         "start": "./scripts/start.bash"
