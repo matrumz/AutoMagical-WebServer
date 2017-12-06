@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+console.log("Starting configuration...");
+
 const ServerConfig = require("../dist/config");
 const fs = require("fs");
 
@@ -22,3 +24,5 @@ try {
 catch (e) {
     throw new Error("An error occurred while initializing the controllers directory: " + e.toString());
 }
+
+console.log("...configuration completed successfully!");
