@@ -80,7 +80,7 @@ export class Config implements IConfig
     {
         var dumpObject: IConfig = { connection: this.connection, routes: this.routes };
         try {
-            fs.writeFileSync(this.configPath, JSON.stringify(dumpObject));
+            fs.writeFileSync(this.configPath, JSON.stringify(dumpObject, null, 4));
         } catch (e) {
             throw new Error("Could not write config to disk: " + (<Error>e).message);
         }
