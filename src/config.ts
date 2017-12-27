@@ -40,7 +40,7 @@ export class Config implements IConfig
     {
         /* Init members */
         if (libFunctions.isNullOrWhitespace(this.configPath))
-            this.configPath = path.join(os.homedir(), ".server.config.json")
+            this.configPath = path.join(os.homedir(), ".amwebs.config.json")
 
         this.connection = { port: null };
         this.routes = { followSymLinks: null, controllerRootDir: null, controllerPattern: null };
