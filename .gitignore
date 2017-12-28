@@ -60,8 +60,5 @@ typings/
 # Compiled files
 dist/
 
-# Test files
-test/
-
 # User-defined configs
 server.config.json
