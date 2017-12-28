@@ -1,7 +1,7 @@
 #!/bin/bash
 
 amwebs-setup
-# node ./genTestControllers.js
+cp ./test/controllers/test.1.controller.js ~/controllers/
 amwebs &
 sleep 5
 RES=$(curl http://localhost:3000/test_1_controller)
