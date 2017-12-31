@@ -22,10 +22,74 @@ This documentation is going to assume CLI installation and use of this package. 
 
 ## Use
 1. Start the program by executing in BASH: `amwebs`
-    * All controllers in the controllers directory will be loaded, and the server will begin listening for web-requests.
+    * All controllers in the controllers directory will be loaded, and the server will begin listening for web-requests. There will be instructions later for creating controllers.
     * Incoming requests that match a URI built by the controllers will be handled by said controllers.
         * Alternately, requests that don't have a matching controller will receive a 404 error.
     > If you have loaded the sample controller, you can now test the server by opening a web-browser on your local machine and navigating to: `localhost:3000/sample_controller/` and `localhost:3000/sample_controller/nest`
 1. Create/Update/Delete controllers as you see fit.
     * As you do so, you will notice the webserver refresh itself as files are saved to disk.
         * Alternately, you can force a refresh by typing `rs` into the terminal that launched amwebs.
+
+# Creating Controllers for the AutoMagical-WebServer
+"Controllers" are merely Javascript files located in the "controllerRootDir" directory that is specified in the configuration file. These files must meet certain naming and structure requirements.
+
+## File Names & Locations for Controllers, and why they are Significant.
+In order for amwebs to recognize a Javascript file as a controller, the filename must be matched by the regular expression specified by "controllerPattern" in the config file, and must be located within "controllerRootDir" or a nested directory therein.
+
+> By default, the filename for controllers must end with `.controller.js`, and the default location for controllers is `~/controllers/`.
+
+The name and location of the controller files dictate the URIs that get created to access those files. That URI is appened to the machine name and port number that's hosting amwebs, and prepends paths specified in the controller file. These parts are summarized below.
+
+1. The machine name/address joined to the port number with a colon
+   * ex: localhost:8080
+   * ex: 192.168.1.5:3001
+   * ex: 73.16.109.75:8000
+   * ex: myawesomedomain.com:3000
+   > For those not familiar with networking, `localhost:3000` simply means to access a resource on your local machine, on port 3000.
+1. The dirctory path after the contollers directory itself. This part is empty if the controller is located directly in the root controller directory.
+1. The filename of the controller, minus the file extension (.js).
+1. The URI path you specify within the controller file itself.
+> Any non-alphanumeric character is converted to an underscore (_).
+
+So, as explained above, the URI for the sample controller, located at ~/controllers/sample.controller.js, is `localhost:3000/sample_controller`. Within that file, you will see two paths, `/` and `/nest` (file explanation below). So the two routes for that file are `localhost:3000/sample_controller/` and `localhost:3000/sample_controller/nest` (when running amwebs on the local machine on port 3000).
+
+## Controller File Structure
+
+```
+class Sample // Whatever class name you want here
+{
+    // router argument required (name it whatever)
+    constructor(router)
+    {
+        /*
+         * router has a function 'get'
+         * The first argument is the end of the URI
+         * The second argument is a function within the class to call when that URI is accessed
+         *  .bind(this) is used on the function in order for it to access resources available in this class.
+         */
+        router.get('/', this.sampleRoot.bind(this));
+        router.get("/nest", this.sampleNest.bind(this));
+    }
+
+    /*
+     * For the functions to be bound to a path in the controller, supply two arguments.
+     * The first is a request object, that describes the web-request that triggered this function. See Node's Express documentation for more info on the object.
+     * The second is a response object, used to return a response back to whatever made the web-call. See Node's Express documentation for more info on the object.
+     */
+    sampleRoot(request, response)
+    {
+        response.send("There's no place like home.");
+    }
+    sampleNest(request, response)
+    {
+        response.send("But it's time to leave the nest!");
+    }
+}
+
+// This last step is easy to forget but important. Without it, AutoMagical-WebServer cannot properly load your class, and an error will be thrown. You need to set the exports property of the module to your class (uninstantiated).
+module.exports = Sample;
+```
+
+Request object documentation: http://expressjs.com/en/api.html#req
+
+Response object documentation: http://expressjs.com/en/api.html#res
