@@ -1,4 +1,3 @@
-[![view on npm](https://img.shields.io/npm/v/automagical-webserver.svg)](https://www.npmjs.org/package/automagical-webserver)
 [![Build Status](https://travis-ci.org/matrumz/automagical-webserver.svg?branch=dev)](https://travis-ci.org/matrumz/automagical-webserver)
 
 # AutoMagical-WebServer
