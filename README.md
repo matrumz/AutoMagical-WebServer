@@ -53,6 +53,8 @@ The name and location of the controller files dictate the URIs that get created 
 
 So, as explained above, the URI for the sample controller, located at ~/controllers/sample.controller.js, is `localhost:3000/sample_controller`. Within that file, you will see two paths, `/` and `/nest` (file explanation below). So the two routes for that file are `localhost:3000/sample_controller/` and `localhost:3000/sample_controller/nest` (when running amwebs on the local machine on port 3000).
 
+If the same controller was, instead, located in a subdirectory "subdir", then the URIs would be `localhost:3000/subdir/sample_controller/` and `localhost:3000/subdir/sample_controller/nest`
+
 ## Controller File Structure
 
 ```
@@ -73,8 +75,10 @@ class Sample // Whatever class name you want here
 
     /*
      * For the functions to be bound to a path in the controller, supply two arguments.
-     * The first is a request object, that describes the web-request that triggered this function. See Node's Express documentation for more info on the object.
-     * The second is a response object, used to return a response back to whatever made the web-call. See Node's Express documentation for more info on the object.
+     * The first is a request object, that describes the web-request that triggered this function.
+     *      See Node's Express documentation for more info on the object.
+     * The second is a response object, used to return a response back to whatever made the web-call.
+     *      See Node's Express documentation for more info on the object.
      */
     sampleRoot(request, response)
     {
@@ -86,7 +90,8 @@ class Sample // Whatever class name you want here
     }
 }
 
-// This last step is easy to forget but important. Without it, AutoMagical-WebServer cannot properly load your class, and an error will be thrown. You need to set the exports property of the module to your class (uninstantiated).
+// This last step is easy to forget but important. Without it, AutoMagical-WebServer cannot properly load your class, and an error will be thrown.
+// You need to set the exports property of the module to your class (uninstantiated).
 module.exports = Sample;
 ```
 
