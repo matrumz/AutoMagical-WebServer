@@ -1,5 +1,5 @@
 [![view on npm](https://img.shields.io/npm/v/automagical-webserver.svg)](https://www.npmjs.org/package/automagical-webserver)
-[![Build Status](https://travis-ci.org/matrumz/automagical-webserver.svg?branch=v1)](https://travis-ci.org/matrumz/automagical-webserver)
+[![Build Status](https://travis-ci.org/matrumz/AutoMagical-WebServer.svg?branch=v1)](https://travis-ci.org/matrumz/automagical-webserver)
 
 # AutoMagical-WebServer
 A skeleton Node/Express web server that automagically accepts web-requests on URIs dynamically generated from "plug-and-play" controller modules. A great starting point for RESTful newbs and casual DIY-ers. Inspired by Dan Wahlin's Pluralsight course: Integrating Angular with Node.js RESTful Services.
@@ -58,9 +58,13 @@ So, as explained above, the URI for the sample controller, located at ~/controll
 
 If the same controller was, instead, located in a subdirectory "subdir", then the URIs would be `localhost:3000/subdir/sample_controller/` and `localhost:3000/subdir/sample_controller/nest`
 
+> Hard links can be used to reference controllers outside of the controller directory. Additionally, soft links can be used to reference directories outside of the controller directory.
+This is useful for connecting this service with other projects in different repositories. Those 3rd party programs can leave their controller files in their repository's file-structure, so long as hard links are created under the amwebs controller dir and have names that follow the guidelines explained above.
+The controllers the hard links reference DO NOT need to follow any naming scheme set by amwebs, however, controllers in soft-linked directories DO need to follow nomenclature rules.
+
 ## Controller File Structure
 
-```
+```javascript
 class Sample // Whatever class name you want here
 {
     // router argument required (name it whatever)

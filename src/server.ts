@@ -1,4 +1,5 @@
 import * as express from "express";
+import * as bodyParser from "body-parser";
 import { Router } from "./router";
 import { Config } from "./config";
 import * as process from "process";
@@ -46,6 +47,14 @@ class Server
          * 'app' from express is where all the magic happens.
          */
         this.app = express();
+
+        /*
+         * Express removed body parsing from core in 4.x
+         * This will be needed when receiving POST requests.
+         * Using extended: true, gives access to more (all) types in our key/value pairs beyond string and array
+         */
+        this.app.use(bodyParser.urlencoded({ extended: true }));
+        this.app.use(bodyParser.json());
 
         /* Pass the app to Router so Router can add recognized URIs (web-addresses) to it */
         this.router = new Router(this.app, this.config.routes);
