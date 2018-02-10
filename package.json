@@ -29,6 +29,7 @@
         "amwebs-gen-controller": "./scripts/genController.js"
     },
     "dependencies": {
+        "body-parser": "^1.18.2",
         "core-js": "^2.5.3",
         "express": "^4.16.2",
         "nodemon": "^1.14.3",
