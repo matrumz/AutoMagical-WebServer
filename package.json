@@ -23,11 +23,7 @@
     "version": "2.0.0-0.0.0",
     "main": "./dist/server.js",
     "types": "./dist/server.d.ts",
-    "bin": {
-        "amwebs": "./scripts/start.bash",
-        "amwebs-setup": "./scripts/setup.js",
-        "amwebs-gen-controller": "./scripts/genController.js"
-    },
+    "bin": {},
     "dependencies": {
         "body-parser": "^1.18.2",
         "command-line-args": "^5.0.2",
