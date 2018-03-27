@@ -23,7 +23,9 @@
     "version": "2.0.0-0.0.0",
     "main": "./dist/server.js",
     "types": "./dist/server.d.ts",
-    "bin": {},
+    "bin": {
+        "amwebs": "./dist/cli.js"
+    },
     "dependencies": {
         "body-parser": "^1.18.2",
         "command-line-args": "^5.0.2",

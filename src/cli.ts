@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import clCommands = require("command-line-commands");
 import * as clArgs from "command-line-args";
 import * as constants from "./lib/data/constants";
