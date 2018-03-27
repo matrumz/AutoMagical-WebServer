@@ -9,14 +9,27 @@
         "allowUnreachableCode": false,
         "strict": true,
         "strictNullChecks": false,
-        "outDir": "dist",
+        "outDir": "./dist",
         "declaration": true,
-        "lib": ["es2015"],
-
-         "typeRoots": [
+        "lib": [
+            "es2015"
+        ],
+        "typeRoots": [
             "node_modules/@types"
-         ]
-   },
+        ],
+        "baseUrl": "./src"
+        // "paths": {
+        //     "@data/*": [
+        //         "lib/data/*"
+        //     ],
+        //     "@models": [
+        //         "lib/data/models.ts"
+        //     ],
+        //     "@constants": [
+        //         "lib/data/constants.ts"
+        //     ]
+        // }
+    },
     "include": [
         "src/**/*.ts"
     ],
