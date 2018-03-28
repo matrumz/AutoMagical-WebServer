@@ -30,6 +30,7 @@
         "body-parser": "^1.18.2",
         "command-line-args": "^5.0.2",
         "command-line-commands": "^2.0.1",
+        "command-line-usage": "^5.0.4",
         "core-js": "^2.5.3",
         "express": "^4.16.2",
         "matrumz-toolbox": "^1.0.0",
@@ -45,7 +46,7 @@
         "typescript": "^2.6.2"
     },
     "scripts": {
-        "setup": " ./scripts/setup.js",
-        "start": "./scripts/start.bash"
+        "test": "./dist/cli.js test",
+        "start": "./dist/cli.js start"
     }
 }
