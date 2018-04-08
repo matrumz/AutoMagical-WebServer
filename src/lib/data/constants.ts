@@ -18,7 +18,7 @@ export namespace cli
         },
         {
             name: "controller",
-            alias: "c",
+            alias: "C",
             type: String,
             multiple: true,
             defaultOption: true,
@@ -26,37 +26,45 @@ export namespace cli
         },
         {
             name: "sample",
-            alias: "s",
+            alias: "S",
             type: String,
             multiple: false,
             group: ["generate"]
         },
         {
             name: "port",
-            alias: "P",
+            alias: "p",
             type: Number,
             multiple: false,
             group: ["start"]
         },
         {
             name: "controllers",
-            alias: "C",
+            alias: "c",
             type: String,
             multiple: false,
             group: ["start", "generate"]
         },
         {
             name: "controller-pattern",
-            alias: "R",
+            alias: "r",
             type: String,
             multiple: false,
             group: ["start"]
         },
         {
             name: "log",
-            alias: "L",
+            alias: "l",
             type: String,
             multiple: false,
+            group: ["start"]
+        },
+        {
+            name: "no-nodemon",
+            alias: "n",
+            type: Boolean,
+            multiple: false,
+            defaultValue: true,
             group: ["start"]
         }
     ];
@@ -91,9 +99,75 @@ export namespace cli
                 {
                     header: "Synopsis",
                     content: [
-                        "$ amwebs start [{bold --port} #] [{bold --controller-pattern} regex] [{bold --log} file] [{bold controllers} file-list]"
+                        "$ amwebs start [{bold --port} #] [{bold --controller-pattern} regex] [{bold --log} file] [{bold --nodemon}] [{bold --controllers} directory-list]",
+                        "$ amwebs start --help"
+                    ]
+                },
+                {
+                    header: "Options",
+                    optionList: [
+                        {
+                            name: "port",
+                            description: "Port number for incoming web-requests.",
+                            alias: "p",
+                            type: Number,
+                            multiple: false,
+                            defaultOption: false,
+                            typeLabel: "{underline #}"
+                        },
+                        {
+                            name: "controller-pattern",
+                            description: "RegEx to identify controller files by their file name.",
+                            alias: "r",
+                            type: String,
+                            multiple: false,
+                            defaultOption: false,
+                            typeLabel: "{underline expression}"
+                        },
+                        {
+                            name: "log",
+                            description: "File in which to save log entries.",
+                            alias: "l",
+                            type: String,
+                            multiple: false,
+                            defaultOption: false,
+                            typeLabel: "{underline file-path}"
+                        },
+                        {
+                            name: "no-nodemon",
+                            description: "Disable use of nodemon to automatically refresh the server when changes are detected.",
+                            alias: "n",
+                            type: Boolean,
+                            multiple: false,
+                            defaultOption: false
+                        },
+                        {
+                            name: "controllers",
+                            description: "Directory in which to look for controllers.",
+                            alias: "c",
+                            type: String,
+                            multiple: true,
+                            defaultOption: false,
+                            typeLabel: "{underline directory} ..."
+                        }
                     ]
                 }
+            ]),
+            generate: clUsage([
+                {
+                    header: "amwebs - generate",
+                    content: "Generates resources for amwebs."
+                },
+                {
+                    header: "Synopsis",
+                    content: [
+                        "$ amwebs generate [{bold --port} #] [{bold --controller-pattern} regex] [{bold --log} file] [{bold --nodemon}] [{bold --controllers} directory-list]",
+                        "$ amwebs generate --help"
+                    ]
+                }
+            ]),
+            test: clUsage([
+
             ])
         }
     }
