@@ -12,5 +12,6 @@ export namespace cli
         controllers: string;
         controllerPattern: string;
         log: string;
+        noNodemon: boolean;
     }
 }

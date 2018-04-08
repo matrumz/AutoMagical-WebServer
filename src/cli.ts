@@ -4,6 +4,8 @@ import clCommands = require("command-line-commands");
 import * as clArgs from "command-line-args";
 import * as constants from "./lib/data/constants";
 import * as models from "./lib/data/models";
+import * as clData from "./lib/data/cli";
+// import { cli } from "lib/data/constants";
 
 class CLI
 {
@@ -16,37 +18,32 @@ class CLI
          * Parse CLI,
          * Get the amwebs command and arguments
          */
-        var command: string;
-        var argv: string[];
-        var args: any;
-        var commandArgs: any;
         /* Get command */
         try {
-            let parsedCmd: { command: string, argv: string[] };
-            parsedCmd = clCommands(constants.cli.commands);
-            argv = parsedCmd.argv;
-            command = parsedCmd.command;
+            let parsedCmd = clCommands(clData.commands);
+            var argv = parsedCmd.argv;
+            var command = parsedCmd.command;
         }
         catch (e) {
-            console.log(constants.cli.usage.commands);
+            console.log(clData.usage.amwebs);
             return;
         }
         /* Get args */
         try {
-            args = clArgs(constants.cli.options, { argv: argv, partial: true, camelCase: true } as clArgs.Options);
-            commandArgs = args[command];
+            var args = clArgs(clData.options, { argv: argv, partial: true, camelCase: true } as clArgs.Options);
+            var commandArgs = args[command];
         }
         catch (e) {
-            console.log(constants.cli.usage.options[command]);
+            console.log(clData.usage[command]);
         }
 
         /* Help messages */
         if (args._all.help) {
             if (command) {
-                console.log(constants.cli.usage.options[command] || "There is no help for this command.");
+                console.log(clData.usage[command] || "There is no help for this command.");
             }
             else {
-                console.log(constants.cli.usage.commands)
+                console.log(clData.commands)
             }
             return;
         }
@@ -54,19 +51,11 @@ class CLI
         switch (command) {
 
             case "generate":
-                CLI.generate({
-                    controllers: commandArgs.controller,
-                    sample: commandArgs.sample
-                });
+                CLI.generate(commandArgs as models.cli.ICliGenerateParams);
                 break;
 
             case "start":
-                CLI.start({
-                    port: commandArgs.port,
-                    controllers: commandArgs.controllers,
-                    controllerPattern: commandArgs.controllerPattern,
-                    log: commandArgs.log
-                });
+                CLI.start(commandArgs as models.cli.ICliStartParams);
                 break;
 
             case "test":
