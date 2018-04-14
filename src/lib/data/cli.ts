@@ -24,7 +24,7 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
         multiple: false
     },
     {
-        name: "controller",
+        name: "controllers",
         alias: "C",
         description: "Generate controller files from a list of controller names.",
         type: String,
@@ -34,11 +34,21 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
         group: [generate]
     },
     {
+        name: "middleware",
+        alias: "M",
+        description: "Generate middleware files from a list of middleware names.",
+        type: String,
+        multiple: true,
+        typeLabel: "{underline middleware-names ...}",
+        group: [generate]
+    },
+    {
         name: "sample",
         alias: "S",
         description: "Generate a sample controller file.",
         type: String,
         multiple: false,
+        typeLabel: "{underline file-path}",
         group: [generate]
     },
     {
@@ -47,6 +57,7 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
         description: "Generate a configuration file.",
         type: String,
         multiple: false,
+        typeLabel: "{underline file-path}",
         group: [generate]
     },
     {
@@ -55,21 +66,40 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
         description: "Use settings found in the specified configuration file.",
         type: String,
         multiple: false,
+        typeLabel: "{underline file-path}",
         group: [start]
     },
     {
-        name: "controllers",
+        name: "controller-dirs",
         alias: "c",
-        description: "Directory in which to look for controllers.",
+        description: "Directory(s) in which to look for controllers.",
         type: String,
         multiple: true,
-        typeLabel: "{underline directory}",
+        typeLabel: "{underline directory ...}",
         group: [start]
     },
     {
         name: "controller-pattern",
         alias: "x",
         description: "RegEx to identify controller files by their file name.",
+        type: String,
+        multiple: false,
+        typeLabel: "{underline expression}",
+        group: [start]
+    },
+    {
+        name: "middleware-dirs",
+        alias: "m",
+        description: "Directory(s) in which to look for middleware.",
+        type: String,
+        multiple: true,
+        typeLabel: "{underline directory ...}",
+        group: [start]
+    },
+    {
+        name: "middleware-pattern",
+        alias: "e",
+        description: "RegEx to identify middleware files by their file name.",
         type: String,
         multiple: false,
         typeLabel: "{underline expression}",
