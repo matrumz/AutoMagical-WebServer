@@ -24,15 +24,6 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
         multiple: false
     },
     {
-        name: "controllers",
-        alias: "c",
-        description: "Directory in which to look for controllers.",
-        type: String,
-        multiple: true,
-        typeLabel: "{underline directory}",
-        group: [start]
-    },
-    {
         name: "controller",
         alias: "C",
         description: "Generate controller files from a list of controller names.",
@@ -67,12 +58,12 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
         group: [start]
     },
     {
-        name: "port",
-        alias: "p",
-        description: "Port number for incoming web-requests.",
-        type: Number,
-        multiple: false,
-        typeLabel: "{underline #}",
+        name: "controllers",
+        alias: "c",
+        description: "Directory in which to look for controllers.",
+        type: String,
+        multiple: true,
+        typeLabel: "{underline directory}",
         group: [start]
     },
     {
@@ -82,6 +73,15 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
         type: String,
         multiple: false,
         typeLabel: "{underline expression}",
+        group: [start]
+    },
+    {
+        name: "port",
+        alias: "p",
+        description: "Port number for incoming web-requests.",
+        type: Number,
+        multiple: false,
+        typeLabel: "{underline #}",
         group: [start]
     },
     {
