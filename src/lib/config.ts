@@ -1,3 +1,5 @@
+import * as myTools from "matrumz-toolbox";
+
 /** Values to configure a server session. */
 export interface IConfig
 {
