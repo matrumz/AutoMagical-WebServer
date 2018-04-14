@@ -51,6 +51,22 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
         group: [generate]
     },
     {
+        name: "configuration",
+        alias: "F",
+        description: "Generate a configuration file.",
+        type: String,
+        multiple: false,
+        group: [generate]
+    },
+    {
+        name: "config",
+        alias: "f",
+        description: "Use settings found in the specified configuration file.",
+        type: String,
+        multiple: false,
+        group: [start]
+    },
+    {
         name: "port",
         alias: "p",
         description: "Port number for incoming web-requests.",
@@ -61,8 +77,8 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
     },
     {
         name: "controller-pattern",
-        alias: "P",
-        description: "RegEx to identify controller files by their file name",
+        alias: "x",
+        description: "RegEx to identify controller files by their file name.",
         type: String,
         multiple: false,
         typeLabel: "{underline expression}",
@@ -79,7 +95,7 @@ export const options: clArgs.OptionDefinition[] & clUsage.OptionDefinition[] = [
     },
     {
         name: "no-nodemon",
-        alias: "N",
+        alias: "n",
         description: "Disable use of nodemon to automatically refresh the server when changes are detected.",
         type: Boolean,
         multiple: false,
@@ -141,7 +157,7 @@ usage[generate] = clUsage([
     {
         header: "Synopsis",
         content: [
-            "$ amwebs generate [{underline controllers}] [{bold options ...}]",
+            "$ amwebs generate [{underline controller(s)}] [{bold options ...}]",
             "$ amwebs generate --help"
         ]
     },
