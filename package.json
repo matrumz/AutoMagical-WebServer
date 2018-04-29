@@ -27,6 +27,7 @@
         "amwebs": "./dist/cli.js"
     },
     "dependencies": {
+        "@types/command-line-usage": "^5.0.1",
         "body-parser": "^1.18.2",
         "command-line-args": "^5.0.2",
         "command-line-commands": "^2.0.1",
