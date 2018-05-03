@@ -5,6 +5,8 @@ import * as clArgs from "command-line-args";
 import * as constants from "./lib/data/constants";
 import * as models from "./lib/data/models";
 import * as clData from "./lib/data/cli";
+import { IConfig, Config } from "./lib/config";
+import * as fs from "fs";
 // import { cli } from "lib/data/constants";
 
 class CLI
@@ -55,7 +57,7 @@ class CLI
                 break;
 
             case "start":
-                CLI.start(commandArgs as models.cli.ICliStartParams);
+                CLI.start(commandArgs);
                 break;
 
             case "test":
@@ -74,14 +76,53 @@ class CLI
         console.log(params);
     }
 
-    private static start(params: models.cli.ICliStartParams): void
+    private static start(params: any): void
     {
-        console.log(params);
+        /* Check for a config file declaration */
+        let fileConfig: IConfig = {} as IConfig;
+        if (params.config) {
+            try {
+                if (fs.existsSync(params.config))
+                    fileConfig = CLI.readConfigFile(params.config)
+                else {
+                    //TODO: log.writeLine("Config file does not exist")
+                    return;
+                }
+            }
+            catch (e) {
+                //TODO: log.writeLine(e.Message);
+                return;
+            }
+        }
+
+        /* Set up configuration object */
+        let config = new Config();
+        config.mergeIn(params, fileConfig);
+        console.debug(JSON.stringify(params));
+        console.debug(JSON.stringify(config.data));
     }
 
     private static test(): void
     {
 
+    }
+
+    private static readConfigFile(path: string): IConfig
+    {
+        let configFile: IConfig = {} as IConfig;
+
+        if (fs.existsSync(path)) {
+            let fileContents: string = fs.readFileSync(path, { encoding: CLI.encoding });
+            configFile = JSON.parse(fileContents);
+        }
+
+        return configFile;
+    }
+
+    /** System text-file encoding (assumed) */
+    private static get encoding(): string
+    {
+        return "utf8";
     }
 }
 CLI.run()
