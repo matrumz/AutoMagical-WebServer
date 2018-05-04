@@ -7,7 +7,6 @@ import * as models from "./lib/data/models";
 import * as clData from "./lib/data/cli";
 import { IConfig, Config } from "./lib/config";
 import * as fs from "fs";
-// import { cli } from "lib/data/constants";
 
 class CLI
 {
