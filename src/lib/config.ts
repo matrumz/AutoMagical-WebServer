@@ -58,7 +58,7 @@ export class Config implements IConfig
      */
     constructor(config: IConfig = {} as IConfig)
     {
-        this.mergeIn(config, Config.default);
+        this.mergeIn(Config.default, config);
     }
 
     //region Public Functions
@@ -79,9 +79,11 @@ export class Config implements IConfig
      */
     public mergeIn(...sources: IConfig[]): void
     {
-        let result: IConfig = {} as IConfig;
-        result = cloner.shallow.merge(result, sources);
-        this.data = result;
+        if (!sources)
+            sources = [];
+        sources.unshift(this.data);
+
+        this.data = cloner.deep.merge({}, ...sources);
     }
 
     //endregion
@@ -126,24 +128,21 @@ export class Config implements IConfig
      */
     public get data(): IConfig
     {
-        return {
-            connection: cloner.deep.copy(this.connection || {} as SubTypes.IConnection),
-            controllers: cloner.deep.copy(this.controllers || {} as SubTypes.IControllers),
-            middleware: cloner.deep.copy(this.middleware || {} as SubTypes.IMiddleware),
-            log: cloner.deep.copy(this.log || {} as SubTypes.ILog),
-            interface: cloner.deep.copy(this.interface || {} as SubTypes.IInterface)
-        };
+       return cloner.deep.merge({}, Config.default, {
+            connection: this.connection,
+            controllers: this.controllers,
+            middleware: this.middleware,
+            log: this.log,
+            interface: this.interface
+        });
     }
     public set data(source: IConfig)
     {
-        if (!source)
-            source = {} as IConfig;
-
-        this.connection = cloner.deep.copy(source.connection || {} as SubTypes.IConnection);
-        this.controllers = cloner.deep.copy(source.controllers || {} as SubTypes.IControllers);
-        this.middleware = cloner.deep.copy(source.middleware || {} as SubTypes.IMiddleware);
-        this.log = cloner.deep.copy(source.log || {} as SubTypes.ILog);
-        this.interface = cloner.deep.copy(source.interface || {} as SubTypes.IInterface);
+        this.connection = cloner.deep.copy(source.connection);
+        this.controllers = cloner.deep.copy(source.controllers);
+        this.middleware = cloner.deep.copy(source.middleware);
+        this.log = cloner.deep.copy(source.log);
+        this.interface = cloner.deep.copy(source.interface);
     }
 
     //endregion

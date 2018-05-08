@@ -97,7 +97,7 @@ class CLI
 
         /* Set up configuration object */
         let config = new Config();
-        config.mergeIn(params, fileConfig);
+        config.mergeIn(fileConfig, Config.unflatten(params));
         console.debug(JSON.stringify(params));
         console.debug(JSON.stringify(config.data));
     }
