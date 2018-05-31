@@ -34,7 +34,7 @@
         "command-line-usage": "^5.0.4",
         "core-js": "^2.5.5",
         "express": "^4.16.3",
-        "matrumz-toolbox": "^1.0.1",
+        "matrumz-toolbox": "^1.1.0",
         "nodemon": "^1.17.3",
         "underscore": "^1.9.0"
     },
