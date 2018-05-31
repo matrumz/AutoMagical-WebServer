@@ -34,6 +34,47 @@ export namespace SubTypes
         /** Disable use of nodemon to automatically refresh the server when changes are detected. */
         noNodemon: boolean;
     }
+
+    export namespace Generators
+    {
+
+        export function connection(def: boolean = false): IConnection
+        {
+            return {
+                port: def ? 3000 : undefined
+            }
+        }
+
+        export function controllers(def: boolean = false): IControllers
+        {
+            return {
+                controllerDirs: def ? ["~/controllers/"] : [],
+                controllerPattern: def ? "^.+\\.controller\\.js$" : undefined
+            }
+        }
+
+        export function middleware(def: boolean = false): IMiddleware
+        {
+            return {
+                middlewareDirs: def ? ["~/middleware/"] : [],
+                middlewarePattern: def ? "^.+\\.middleware\\.js$" : undefined
+            }
+        }
+
+        export function log(def: boolean = false): ILog
+        {
+            return {
+                log: def ? "~/.amwebs.log" : undefined
+            }
+        }
+
+        export function iinterface(def: boolean = false): IInterface
+        {
+            return {
+                noNodemon: def ? false : undefined
+            }
+        }
+    }
 }
 
 /** Values to configure a server session. */
@@ -56,7 +97,7 @@ export class Config implements IConfig
      * Default values are used for any missing arguments
      * @param {IConfig} [config=Config.default] Starting values for the configuration object.
      */
-    constructor(config: IConfig = {} as IConfig)
+    constructor(config: IConfig = Config.empty)
     {
         this.mergeIn(Config.default, config);
     }
@@ -83,12 +124,22 @@ export class Config implements IConfig
             sources = [];
         sources.unshift(this.data);
 
-        this.data = cloner.deep.merge({}, ...sources);
+        this.data = Config.merge({} as IConfig, ...sources);
     }
 
     //endregion
 
     //region Public Static Functions
+
+    public static merge(target: IConfig, ...sources: IConfig[]): IConfig
+    {
+        sources.forEach((source: IConfig): void =>
+        {
+            myTools.prune(source, true, true, false);
+        });
+
+        return cloner.deep.merge(target, ...sources);
+    }
 
     /**
      * Return a proper configuration object from a flat object. Useful for unflattening command-line args.
@@ -128,7 +179,7 @@ export class Config implements IConfig
      */
     public get data(): IConfig
     {
-       return cloner.deep.merge({}, Config.default, {
+        return cloner.deep.merge({}, Config.default, {
             connection: this.connection,
             controllers: this.controllers,
             middleware: this.middleware,
@@ -152,23 +203,22 @@ export class Config implements IConfig
     public static get default(): IConfig
     {
         return {
-            connection: {
-                port: 3000
-            },
-            controllers: {
-                controllerDirs: ["~/controllers/"],
-                controllerPattern: "^.+\\.controller\\.js$"
-            },
-            middleware: {
-                middlewareDirs: ["~/middleware/"],
-                middlewarePattern: "^.+\\.middleware\\.js$"
-            },
-            log: {
-                log: "~/.amwebs.log"
-            },
-            interface: {
-                noNodemon: false
-            }
+            connection: SubTypes.Generators.connection(true),
+            controllers: SubTypes.Generators.controllers(true),
+            middleware: SubTypes.Generators.middleware(true),
+            log: SubTypes.Generators.log(true),
+            interface: SubTypes.Generators.iinterface(true)
+        };
+    }
+
+    public static get empty(): IConfig
+    {
+        return {
+            connection: SubTypes.Generators.connection(),
+            controllers: SubTypes.Generators.controllers(),
+            middleware: SubTypes.Generators.middleware(),
+            log: SubTypes.Generators.log(),
+            interface: SubTypes.Generators.iinterface()
         };
     }
 
